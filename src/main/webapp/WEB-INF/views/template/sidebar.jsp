@@ -41,6 +41,7 @@
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="/notice/list">Notice</a>
                         <a class="collapse-item" href="/qna/list">QnA</a>
+                        <a class="collapse-item" href="/product/list">product</a>
                     </div>
                 </div>
             </li>
