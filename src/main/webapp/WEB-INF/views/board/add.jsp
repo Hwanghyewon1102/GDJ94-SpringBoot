@@ -30,7 +30,7 @@
             	
             		<!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">공지사항</h1>
+                        <h1 class="h3 mb-0 text-gray-800">${category} ${sub}</h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
@@ -39,17 +39,18 @@
                     <div class="row">                    
 	                    <!-- 생성한 contents 작성 -->
 	                    <form method="post">
+	                    	<input type="hidden" name="boardNum"  value="${dto.boardNum}"> 
 						  <div class="form-group">
 						    <label for="board_title" class="form-label">제목</label>
-						    <input type="text" class="form-control" id="board_title" name="boardTitle">
+						    <input type="text" class="form-control" value="${dto.boardTitle}" id="board_title" name="boardTitle">
 						  </div>
 						  <div class="form-group">
 						    <label for="board_writer" class="form-label">작성자</label>
-						    <input type="text" class="form-control" id="board_writer" name="boardWriter">
+						    <input type="text" class="form-control" value="${dto.boardWriter}" id="board_writer" name="boardWriter">
 						  </div>
 						  <div class="form-group">
 							<label for="board_contents" class="form-label">내용</label>
-							<textarea class="form-control" id="boardContents" rows="3" name="boardContents"></textarea>
+							<textarea class="form-control" id="boardContents"  rows="3" name="boardContents"> ${dto.boardContents} </textarea>
 						  </div>
 						  <button type="submit" class="btn btn-primary">완료</button>
 						</form>

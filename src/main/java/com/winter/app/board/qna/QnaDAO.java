@@ -9,4 +9,6 @@ import com.winter.app.board.BoardDTO;
 @Mapper
 public interface QnaDAO extends BoardDAO{
 	public int refUpdate(BoardDTO boardDTO) throws Exception;
+	public int stepInsert(QnaDTO qnaDTO) throws Exception;
+	public int stepUpdate(QnaDTO qnaDTO) throws Exception;
 }

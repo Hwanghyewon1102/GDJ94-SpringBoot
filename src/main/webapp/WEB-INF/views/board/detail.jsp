@@ -30,9 +30,9 @@
             	
             		<!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800">${category} Detail</h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> 상세보기</a>
+                                class="fas fa-download fa-sm text-white-50"></i>상세보기</a>
                     </div>
                     
                     <!-- Content Row -->
@@ -59,10 +59,24 @@
 				                    </div>
 				
 				                </div>
+				                <div class="card-foorer">
+				                	<c:if test="${category ne 'Notice'}">
+					                	<a href="./reply?boardNum=${detail.boardNum}" class="btn btn-danger">답글</a>
+				                	</c:if>
+				                </div>
+				                
 				                <div class="card-footer text-center">
 				                    <a href="./update?boardNum=${detail.boardNum}" class="btn btn-warning btn-icon-split">
 				                        <span class="text">수정</span>
 				                    </a>
+				                    
+				                   <form action="./delete" method="post" class="d-inline ml-2">
+								        <input type="hidden" name="boardNum" value="${detail.boardNum}">
+								        
+								        <button type="submit" class="btn btn-danger btn-icon-split">
+								            <span class="text">DEELTE</span>
+								        </button>
+								    </form>
 				                    
 				                    <a href="./delete?boardNum=${detail.boardNum}" class="btn btn-danger btn-icon-split ml-2">
 				                        <span class="text">삭제</span>

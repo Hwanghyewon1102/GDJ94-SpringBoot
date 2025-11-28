@@ -16,16 +16,16 @@ class NoticeDAOTest {
 	private NoticeDAO noticeDAO;
 	
 	// @Test
-	void testDetail() throws Exception{
-		NoticeDTO noticeDTO = new NoticeDTO();
-		noticeDTO.setBoardNum(1L);
-		
-		noticeDTO = noticeDAO.detail(noticeDTO);
-		assertNotNull(noticeDTO);
-	}
+//	void testDetail() throws Exception{
+//		NoticeDTO noticeDTO = new NoticeDTO();
+//		noticeDTO.setBoardNum(1L);
+//		
+//		noticeDTO = noticeDAO.detail(noticeDTO);
+//		assertNotNull(noticeDTO);
+//	}
 	
 	// @Test
-	public List<NoticeDTO> list(Long page, Pager pager) throws Exception{
+	//public List<NoticeDTO> list(Long page, Pager pager) throws Exception{
 		// page*pager.getCountNum()-pager.getCountNum()
 		// (page-1)*pager.getCountNum()
 		// (page-1)*10
@@ -35,8 +35,8 @@ class NoticeDAOTest {
 		//pager.setCountNum(10L);
 		//Long s = (page-1)*pager.getCountNum();
 		//pager.setStartNum(s);
-		return noticeDAO.list(pager);
-	}
+		//return noticeDAO.list(pager);
+	// }
 	
 	 @Test
 	void testAdd() throws Exception{

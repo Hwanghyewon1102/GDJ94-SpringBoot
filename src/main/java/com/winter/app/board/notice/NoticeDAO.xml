@@ -27,18 +27,18 @@
 		VALUES(#{boardTitle}, #{boardWriter}, #{boardContents}, NOW(), 0)
 	</insert>
 	
-	<delete id="delete">
+	<delete id="delete" parameterType="NoticeDTO">
 		DELETE FROM notice WHERE board_num=#{boardNum}
 	</delete>
 	
-	<update id="update">
+	<!-- <update id="update">
 		UPDATE notice SET
 		board_title=#{boardTitle}, 
 		board_writer=#{boardWriter}, 
 		board_contents=#{boardContents}, 
 		board_date=NOW() 
 		WHERE board_num=#{boardNum}
-	</update>
+	</update> -->
 	
 	<select id="list" resultType="NoticeDTO" parameterType="Pager">
 		SELECT * FROM notice
@@ -53,4 +53,7 @@
 		<include refid="search"></include>
 	</select>
 	
+	<update id="update" parameterType="NoticeDTO">
+		UPDATE notice SET board_title=#{boardTitle}, board_contents=#{boardContents} WHERE board_num=#{boardNum}
+	</update>
 </mapper>

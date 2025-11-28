@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>QnA List</title>
+<title>Insert title here</title>
 <c:import url="/WEB-INF/views/template/head.jsp"></c:import>
 </head>
 <body id="page-top">
@@ -19,13 +19,13 @@
             	<div class="container-fluid">
             	
             		<div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">QnA 게시판</h1>
+                        <h1 class="h3 mb-0 text-gray-800">${category}</h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
                     
-                    <div class="row justify-content-center">
-                    
+                    <div class="row justify-content-center">      
+                    	
                     	<div class="col-sm-8">
                     	
 	                    	<form action="./list" method="get">
@@ -35,11 +35,11 @@
 									  <option value="k2">내용</option>
 									  <option value="k3">작성자</option>
 									</select>
-									<input type="text" class="form-control" name="search" value="${param.search}" placeholder="검색어를 입력하세요" aria-label="Recipient’s username" aria-describedby="button-addon2">
+								  <input type="text" class="form-control" name="search" value="${param.search}" placeholder="검색어를 입력하세요" aria-label="Recipient’s username" aria-describedby="button-addon2">
 								  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">검색</button>
 								</div>
-	                    	</form>   
-	                    	                 
+	                    	</form>
+	                    	
 		                    <table class="table mt-5">
 							  <thead>
 							    <tr>
@@ -49,23 +49,22 @@
 							      <th scope="col">Contents</th>
 							      <th scope="col">Date</th>
 							      <th scope="col">Hit</th>
-							      <th scope="col">Ref</th>
-							      <th scope="col">Step</th>
-							      <th scope="col">Depth</th>
 							    </tr>
 							  </thead>
 							  <tbody>
 								  <c:forEach items="${list}" var="item">
 								    <tr>
 								      <th scope="row">${item.boardNum}</th>
-								      <td><a href="./detail?boardNum=${item.boardNum}">${item.boardTitle}</a></td>
+								      <td>
+								      <c:catch>
+								      <c:forEach begin="1" end="${item.boardDepth}">-- </c:forEach>
+								      </c:catch>
+								      <a href="./detail?boardNum=${item.boardNum}">${item.boardTitle}</a>
+								      </td>
 								      <td>${item.boardWriter}</td>
 								      <td>${item.boardContents}</td>
 								      <td>${item.boardDate}</td>
 								      <td>${item.boardHit}</td>
-								      <td>${item.boardRef}</td>
-								      <td>${item.boardStep}</td>
-								      <td>${item.boardDepth}</td>
 								    </tr>
 								  </c:forEach>
 							  </tbody>
@@ -97,7 +96,7 @@
 							<div>
 					        	<a href="./add" class="btn btn-outline-primary">글쓰기</a>
 							</div>
-						
+							
 						</div>
                     </div>
 						

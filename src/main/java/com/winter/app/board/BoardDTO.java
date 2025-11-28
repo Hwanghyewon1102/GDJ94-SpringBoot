@@ -18,4 +18,10 @@ public class BoardDTO {
 	private String boardContents;
 	private LocalDate boardDate;
 	private Long boardHit;
+	
+	
+	
+	
+	
+	
 }
