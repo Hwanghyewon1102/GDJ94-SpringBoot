@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.winter.app.util.Pager;
 @SpringBootTest
 class NoticeDAOTest {
 	@Autowired
@@ -23,20 +25,32 @@ class NoticeDAOTest {
 	}
 	
 	// @Test
-	void testList() throws Exception{
-		List<NoticeDTO> ar = noticeDAO.list();
-		assertNotEquals(0, ar.size());
+	public List<NoticeDTO> list(Long page, Pager pager) throws Exception{
+		// page*pager.getCountNum()-pager.getCountNum()
+		// (page-1)*pager.getCountNum()
+		// (page-1)*10
+		// 1 = 0    0
+		// 2 = 10   5
+		// 3 = 20   10
+		//pager.setCountNum(10L);
+		//Long s = (page-1)*pager.getCountNum();
+		//pager.setStartNum(s);
+		return noticeDAO.list(pager);
 	}
 	
-	// @Test
+	 @Test
 	void testAdd() throws Exception{
-		NoticeDTO noticeDTO = new NoticeDTO();
-		noticeDTO.setBoardTitle("공지사항입니다~~~");
-		noticeDTO.setBoardWriter("후임관리자!");
-		noticeDTO.setBoardContents("공지공지공공지");
-		
-		int result = noticeDAO.add(noticeDTO);
-		assertEquals(1, result);
+		for(int i=0; i<120; i++) {
+			NoticeDTO noticeDTO = new NoticeDTO();
+			noticeDTO.setBoardTitle("title"+i);
+			noticeDTO.setBoardWriter("writer"+i);
+			noticeDTO.setBoardContents("contents"+i);
+			
+			noticeDAO.add(noticeDTO);
+			if(i%10==0){
+				Thread.sleep(500);
+			}
+		}
 		
 	}
 	
@@ -48,7 +62,7 @@ class NoticeDAOTest {
 		assertEquals(1, result);
 	}
 	
-	@Test
+	// @Test
 	void testUpdate() throws Exception{
 		NoticeDTO noticeDTO = new NoticeDTO();
 		noticeDTO.setBoardTitle("업데이트");

@@ -5,14 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.winter.app.util.Pager;
+
 @Service
 public class NoticeService {
 	
 	@Autowired
 	public NoticeDAO noticeDAO;
 	
-	public List<NoticeDTO> list() throws Exception{
-		return noticeDAO.list();
+	public List<NoticeDTO> list(Pager pager) throws Exception{
+		// 1. totalCount 구하기
+		Long totalCount = noticeDAO.count(pager);
+		pager.pageing(totalCount);
+		return noticeDAO.list(pager);
 	}
 	
 	public NoticeDTO detail(NoticeDTO noticeDTO) throws Exception{

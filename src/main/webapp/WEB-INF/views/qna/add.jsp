@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <c:import url="/WEB-INF/views/template/head.jsp"></c:import>
-	
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
 </head>
 <body id="page-top">
 	<div id="wrapper">
@@ -30,16 +30,38 @@
             	
             		<!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Index</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Qna</h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
                     
                     <!-- Content Row -->
-                    <div class="row">
-                    
-                    <!-- 생성한 contents 작성 -->
-                    
+                    <div class="row">                    
+	                    <!-- 생성한 contents 작성 -->
+	                    <form method="post">
+									  <div class="form-group">
+									    <label for="board_title" class="font-weight-bold">제목</label>
+									    <input type="text" class="form-control" id="board_title" name="boardTitle" placeholder="제목을 입력하세요">
+									  </div>
+									  
+									  <div class="form-group">
+									    <label for="board_writer" class="font-weight-bold">작성자</label>
+									    <input type="text" class="form-control" id="board_writer" name="boardWriter" placeholder="작성자 이름">
+									  </div>
+									  
+									  <div class="form-group">
+										<label for="boardContents" class="font-weight-bold">내용</label>
+										<textarea class="form-control" id="boardContents" name="boardContents"></textarea>
+									  </div>
+									  
+									  <hr>
+									  
+									  <div class="d-flex justify-content-end">
+									  	<a href="./list" class="btn btn-secondary mr-2">취소</a>
+									  	<button type="submit" class="btn btn-primary">등록 완료</button>
+									  </div>
+									</form>
+	                    
                     </div>
             	</div>
             	<!-- container-fulid -->
@@ -62,5 +84,9 @@
 	
 	<c:import url="/WEB-INF/views/template/foot.jsp"></c:import>
 	
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
+    <script type="text/javascript">
+    	$("#boardContents").summernote()
+    </script>
 </body>
 </html>
