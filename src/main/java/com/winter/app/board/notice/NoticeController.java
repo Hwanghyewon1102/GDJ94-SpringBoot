@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.winter.app.board.BoardDTO;
 import com.winter.app.util.Pager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class NoticeController {
 	@GetMapping("list")
 	public void  list(Pager pager, Long page, Model model) throws Exception{
 		
-		List<NoticeDTO> list = noticeService.list(pager);
+		List<BoardDTO> list = noticeService.list(pager);
 	    model.addAttribute("list", list);
 	    
 	    model.addAttribute("pager", pager);
@@ -50,12 +51,12 @@ public class NoticeController {
 	}
 	
 	@GetMapping("detail")
-	public String detail(NoticeDTO noticeDTO, Model model) throws Exception{
-		noticeDTO = noticeService.detail(noticeDTO);
+	public String detail(BoardDTO boardDTO, Model model) throws Exception{
+		boardDTO = noticeService.detail(boardDTO);
 		
-		model.addAttribute("detail", noticeDTO);
+		model.addAttribute("detail", boardDTO);
 		//null(조회실패시 처리)
-		if(noticeDTO == null) {
+		if(boardDTO == null) {
 			return "redirect:list";
 		}
 		return "notice/detail";

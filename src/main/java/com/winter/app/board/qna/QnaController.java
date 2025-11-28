@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.winter.app.board.BoardDTO;
 import com.winter.app.board.notice.NoticeDAO;
 import com.winter.app.board.notice.NoticeDTO;
 import com.winter.app.util.Pager;
@@ -24,19 +25,19 @@ public class QnaController {
 	
 	@GetMapping("list")
 	public void list(Model model, Pager pager, Long page) throws Exception {
-		List<QnaDTO> list = qnaService.list(pager); 
+		List<BoardDTO> list = qnaService.list(pager); 
 		model.addAttribute("list", list);
          model.addAttribute("pager", pager); 
 	}
 	
 	@GetMapping("add")
-	public void add(QnaDTO qnaDTO)throws Exception{
+	public void add(BoardDTO boardDTO)throws Exception{
 	}
 	
 	
 	@PostMapping("add")
-	public String add(QnaDTO qnaDTO, Model model)throws Exception{
-		int result = qnaService.add(qnaDTO);
+	public String add(BoardDTO boardDTO, Model model)throws Exception{
+		int result = qnaService.add(boardDTO);
 		
 		if(result > 0) {
 		}

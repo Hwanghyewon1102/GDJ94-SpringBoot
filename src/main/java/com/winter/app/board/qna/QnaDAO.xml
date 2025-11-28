@@ -33,7 +33,7 @@
         VALUES (#{boardTitle}, #{boardWriter}, #{boardContents}, now(), 0, 0, 0, 0)
     </insert>
     
-    <update id="refUpdate" parameterType="com.winter.app.board.qna.QnaDTO">
+    <update id="refUpdate" parameterType="QnaDTO">
     	UPDATE qna SET board_ref=#{boardNum} WHERE board_num=#{boardNum}
     </update>
     
