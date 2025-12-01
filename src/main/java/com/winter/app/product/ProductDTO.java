@@ -15,5 +15,5 @@ public class ProductDTO {
 	private String productsContents;
 	private String productsCategory;
 	private BigDecimal productsRate;
-	private byte products_sale;
+	private byte productsSale;
 }

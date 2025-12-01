@@ -57,12 +57,21 @@
 								      <th scope="row">${dto.productsNum}</th>
 								      <td>
 								     
-								      <a href="./detail?boardNum=${dto.productsNum}">${dto.productsName}</a>
+								      <a href="./detail?productsNum=${dto.productsNum}">${dto.productsName}</a>
 								      </td>
 								      <td>${dto.productsContents}</td>
 								      <td>${dto.productsCategory}</td>
 								      <td>${dto.productsRate}</td>
-								      <td>${dto.products_sale}</td>
+								      <td>
+				                       	<c:choose>
+								        	<c:when test="${dto.productsSale eq 0}">
+								                O
+								            </c:when>
+								            <c:otherwise>
+								                X
+								            </c:otherwise>
+								        </c:choose>
+				                       </td>
 								    </tr>
 								  </c:forEach>
 							  </tbody>

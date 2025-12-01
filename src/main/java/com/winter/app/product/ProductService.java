@@ -5,40 +5,34 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winter.app.board.BoardDTO;
-import com.winter.app.board.BoardService;
 import com.winter.app.util.Pager;
 
 @Service
-public class ProductService implements BoardService{
+public class ProductService{
 	
 	@Autowired
 	private ProductDAO productDAO;
 
-	@Override
-	public List<BoardDTO> list(Pager pager) throws Exception {
-		
+	public List<ProductDTO> list(Pager pager) throws Exception {
+		Long totalCount = productDAO.count(pager);
+		pager.pageing(totalCount);
 		return productDAO.list(pager);
 	}
 
-	@Override
-	public BoardDTO detail(BoardDTO boardDTO) throws Exception {
-		return null;
+	public ProductDTO detail(ProductDTO productDTO) throws Exception {
+		return productDAO.detail(productDTO);
 	}
 
-	@Override
-	public int add(BoardDTO boardDTO) throws Exception {
-		return 0;
+	public int add(ProductDTO productDTO) throws Exception {
+		return productDAO.add(productDTO);
 	}
 
-	@Override
-	public int update(BoardDTO boardDTO) throws Exception {
-		return 0;
+	public int update(ProductDTO productDTO) throws Exception {
+		return productDAO.update(productDTO);
 	}
 
-	@Override
-	public int delete(BoardDTO boardDTO) throws Exception {
-		return 0;
+	public int delete(ProductDTO productDTO) throws Exception {
+		return productDAO.delete(productDTO);
 	}
 	
 }
