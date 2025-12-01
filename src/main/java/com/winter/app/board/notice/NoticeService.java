@@ -1,11 +1,17 @@
 package com.winter.app.board.notice;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.winter.app.board.BoardDTO;
+import com.winter.app.board.BoardFileDTO;
 import com.winter.app.board.BoardService;
 import com.winter.app.util.Pager;
 
@@ -15,7 +21,8 @@ public class NoticeService implements BoardService{
 	@Autowired
 	public NoticeDAO noticeDAO;
 	
-	
+	@Value("${app.upload.notice}")
+	private String uploadPath;
 	
 	
 	@Override
@@ -31,8 +38,37 @@ public class NoticeService implements BoardService{
 		return noticeDAO.detail(boardDTO);
 	}
 	
-	public int add(BoardDTO boardDTO) throws Exception{
-		return noticeDAO.add(boardDTO);
+	@Override
+	public int add(BoardDTO boardDTO, MultipartFile[] attach) throws Exception{
+		// noticeDAO.add(boardDTO);
+		
+		// 1. 파일을 HDD에 저장
+		//  1) 어디에 저장?
+		//  2) 아떤 이름으로 저장?
+		
+		for(MultipartFile f: attach) {
+			File file = new File(uploadPath);
+			if(!file.exists()) {
+				file.mkdirs();
+			}
+			
+			String fileName = UUID.randomUUID().toString();
+			fileName = fileName+"_"+f.getOriginalFilename();
+			
+			file = new File(file, fileName);
+			
+			// 3. 파일 저장
+			FileCopyUtils.copy(f.getBytes(), file);
+			
+			// 4. 정보를 DB에 저장
+			BoardFileDTO boardFileDTO = new NoticeFileDTO();
+			boardFileDTO.setFileName(fileName);
+			boardFileDTO.setFileOrigin(f.getOriginalFilename());
+			boardFileDTO.setBoard_num(boardDTO.getBoardNum());
+			noticeDAO.fileAdd(boardFileDTO);
+		}
+		
+		return 1; 
 	}
 	
 	public int update(BoardDTO boardDTO) throws Exception{
@@ -42,4 +78,6 @@ public class NoticeService implements BoardService{
 	public int delete(BoardDTO boardDTO)throws Exception{
 		return noticeDAO.delete(boardDTO);
 	}
+
+
 }

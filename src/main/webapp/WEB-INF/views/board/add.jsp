@@ -38,7 +38,7 @@
                     <!-- Content Row -->
                     <div class="row">                    
 	                    <!-- 생성한 contents 작성 -->
-	                    <form method="post">
+	                    <form method="post" enctype="multipart/form-data">
 	                    	<input type="hidden" name="boardNum"  value="${dto.boardNum}"> 
 						  <div class="form-group">
 						    <label for="board_title" class="form-label">제목</label>
@@ -52,6 +52,14 @@
 							<label for="board_contents" class="form-label">내용</label>
 							<textarea class="form-control" id="boardContents"  rows="3" name="boardContents"> ${dto.boardContents} </textarea>
 						  </div>
+						  <div class="form-group" id="files">
+								<button type="button" id="fileAdd">File add</button>
+								
+						  </div>
+							
+							<div id="file">
+							</div>
+						  
 						  <button type="submit" class="btn btn-primary">완료</button>
 						</form>
 	                    
@@ -77,6 +85,7 @@
 	
 	<c:import url="/WEB-INF/views/template/foot.jsp"></c:import>
 	
+		<script src="/js/board/board.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
     <script type="text/javascript">
     	$("#boardContents").summernote()

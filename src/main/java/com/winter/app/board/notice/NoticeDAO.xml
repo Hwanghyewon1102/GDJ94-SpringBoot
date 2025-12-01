@@ -56,4 +56,8 @@
 	<update id="update" parameterType="NoticeDTO">
 		UPDATE notice SET board_title=#{boardTitle}, board_contents=#{boardContents} WHERE board_num=#{boardNum}
 	</update>
+	
+	<insert id="fileAdd" parameterType="NoticeDTO" useGeneratedKeys="true" keyProperty="boardNum">
+		INSERT INTO notice_file(file_name, file_origin, board_num) VALUES(#{fileName}, #{fileOrigin}, #{boardNum})
+	</insert>
 </mapper>
