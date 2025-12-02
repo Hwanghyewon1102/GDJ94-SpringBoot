@@ -14,6 +14,7 @@ import com.winter.app.board.BoardDTO;
 import com.winter.app.board.BoardFileDTO;
 import com.winter.app.board.BoardService;
 import com.winter.app.board.notice.NoticeFileDTO;
+import com.winter.app.files.FileManager;
 import com.winter.app.util.Pager;
 
 @Service
@@ -21,6 +22,9 @@ public class QnaService implements BoardService {
 
     @Autowired
     private QnaDAO qnaDAO;
+    
+    @Autowired
+    private FileManager fileManager;
 
     @Value("${app.upload.qna}")  
     private String uploadPath;
@@ -34,32 +38,30 @@ public class QnaService implements BoardService {
 
     @Override
     public int add(BoardDTO boardDTO, MultipartFile[] attach) throws Exception {
-
+    	int result = qnaDAO.add(boardDTO);
+		System.out.println("boardNum = " + boardDTO.getBoardNum());
+    	qnaDAO.refUpdate(boardDTO);
+		System.out.println("boardNum = " + boardDTO.getBoardNum());
+    	if (attach == null) {
+				return result;
+		}
+    		
+    	File file = new File(uploadPath);
+    		
         for (MultipartFile f : attach) {
-            File file = new File(uploadPath);
-            if(!file.exists()) {
-            	file.mkdirs();
-            }
-            
-            String fileName = UUID.randomUUID().toString();
-			fileName = fileName+"_"+f.getOriginalFilename();
-			
-			file = new File(file, fileName);
-			
-			// 3. 파일 저장
-			FileCopyUtils.copy(f.getBytes(), file);
-			
-			// 4. 정보를 DB에 저장
-			BoardFileDTO boardFileDTO = new NoticeFileDTO();
+        	if(f == null || f.isEmpty()) {
+				continue;
+			}
+			String fileName = fileManager.fileSave(file, f);
+
+			BoardFileDTO boardFileDTO = new BoardFileDTO();
 			boardFileDTO.setFileName(fileName);
 			boardFileDTO.setFileOrigin(f.getOriginalFilename());
-			boardFileDTO.setBoard_num(boardDTO.getBoardNum());
-			int result = qnaDAO.fileAdd(boardFileDTO);
-			qnaDAO.refUpdate(boardDTO);
-			return result;
+			boardFileDTO.setBoardNum(boardDTO.getBoardNum());
+			qnaDAO.fileAdd(boardFileDTO);
         }
         
-        return 1;
+        return result;
 
     }
 
@@ -79,7 +81,8 @@ public class QnaService implements BoardService {
     }
 
     public int reply(QnaDTO qnaDTO) throws Exception {
-        QnaDTO parent = (QnaDTO) qnaDAO.detail(qnaDTO);
+    	QnaDTO parent = (QnaDTO) qnaDAO.detail(qnaDTO); 
+
         int result = qnaDAO.stepUpdate(parent);
 
         qnaDTO.setBoardRef(parent.getBoardRef());

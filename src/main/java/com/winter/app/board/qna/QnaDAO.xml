@@ -29,7 +29,8 @@
 	</select>
     
     <insert id="add" parameterType="com.winter.app.board.qna.QnaDTO" useGeneratedKeys="true" keyProperty="boardNum">
-        INSERT INTO qna (board_title, board_writer, board_contents, board_date, board_hit, board_ref, board_step, board_depth)
+        INSERT INTO qna
+         (board_title, board_writer, board_contents, board_date, board_hit, board_ref, board_step, board_depth)
         VALUES (#{boardTitle}, #{boardWriter}, #{boardContents}, now(), 0, #{boardRef}, #{boardStep}, #{boardDepth})
     </insert>
     
@@ -37,9 +38,31 @@
     	UPDATE qna SET board_ref=#{boardNum} WHERE board_num=#{boardNum}
     </update>
     
-    <select id="detail" resultType="qnaDTO">
-    	SELECT * FROM qna WHERE board_num=#{boardNum}
+    <select id="detail" resultMap="qnaDetailResult">
+    	 SELECT * 
+    		 FROM qna q 
+			 LEFT JOIN qna_file f
+			 USING(board_num)
+			 WHERE q.board_num = #{boardNum};
     </select>
+    
+    <resultMap type="QnaDTO" id="qnaDetailResult">
+    	<id column="board_num" property="boardNum" />
+    	<result column="board_title" property="boardTitle"/>
+    	<result column="board_writer" property="boardWriter"/>
+    	<result column="board_contents" property="boardContents"/>
+    	<result column="board_data" property="boardData"/>
+    	<result column="board_hit" property="boardHit"/>
+    	<result column="board_ref" property="boardRef"/>
+    	<result column="board_step" property="boardStep"/>
+    	<result column="board_depth" property="boardDepth"/>
+    	<collection property="fileDTOs" javaType="java.util.List" ofType="BoardFileDTO">
+    		<id column="file_num" property="fileNum"/>
+    		<result column="file_name" property="fileName"/>
+    		<result column="file_origin" property="fileOrigin"/>
+    	</collection>
+    
+    </resultMap>
     
     <update id="stepUpdate" parameterType="QnaDTO">
     	UPDATE qna SET board_step=board_step+1 WHERE board_ref = #{boardRef} AND board_step > #{boardStep} 
@@ -59,7 +82,8 @@
 		DELETE FROM qna WHERE board_num=#{boardNum}
 	</delete>
 	
-	<insert id="fileAdd" parameterType="QnaDTO" useGeneratedKeys="true" keyProperty="boardNum">
-		INSERT INTO qna_file(file_name, file_origin, board_num) VALUES(#{fileName}, #{fileOrigin}, #{boardNum})
+	<insert id="fileAdd" parameterType="BoardFileDTO">
+		INSERT INTO qna_file
+		 VALUES(null, #{fileName}, #{fileOrigin}, #{boardNum})
 	</insert>
     </mapper>

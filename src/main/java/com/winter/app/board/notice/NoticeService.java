@@ -13,13 +13,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.winter.app.board.BoardDTO;
 import com.winter.app.board.BoardFileDTO;
 import com.winter.app.board.BoardService;
+import com.winter.app.files.FileManager;
 import com.winter.app.util.Pager;
 
 @Service
 public class NoticeService implements BoardService{
 	
 	@Autowired
-	public NoticeDAO noticeDAO;
+	private NoticeDAO noticeDAO;
+	
+	@Autowired
+	private FileManager fileManager;
 	
 	@Value("${app.upload.notice}")
 	private String uploadPath;
@@ -39,36 +43,35 @@ public class NoticeService implements BoardService{
 	}
 	
 	@Override
-	public int add(BoardDTO boardDTO, MultipartFile[] attach) throws Exception{
-		// noticeDAO.add(boardDTO);
+	public int add(BoardDTO boardDTO, MultipartFile [] attach)throws Exception{
+		//글번호가 필요
+		int result = noticeDAO.add(boardDTO);
+		System.out.println("boardNum = " + boardDTO.getBoardNum());
 		
-		// 1. 파일을 HDD에 저장
-		//  1) 어디에 저장?
-		//  2) 아떤 이름으로 저장?
+		if(attach == null) {
+			return result;
+		}
+		
+		//1. 파일을 HDD에 저장
+		//   1) 어디에 저장?
+		//   2) 어떤 이름으로 저장?
+		File file = new File(uploadPath);
 		
 		for(MultipartFile f: attach) {
-			File file = new File(uploadPath);
-			if(!file.exists()) {
-				file.mkdirs();
+			if(f==null || f.isEmpty()) {
+				continue;
 			}
-			
-			String fileName = UUID.randomUUID().toString();
-			fileName = fileName+"_"+f.getOriginalFilename();
-			
-			file = new File(file, fileName);
-			
-			// 3. 파일 저장
-			FileCopyUtils.copy(f.getBytes(), file);
-			
-			// 4. 정보를 DB에 저장
-			BoardFileDTO boardFileDTO = new NoticeFileDTO();
+			String fileName = fileManager.fileSave(file, f);
+			//4. 정보를 DB에 저장
+			BoardFileDTO boardFileDTO = new BoardFileDTO();
 			boardFileDTO.setFileName(fileName);
 			boardFileDTO.setFileOrigin(f.getOriginalFilename());
-			boardFileDTO.setBoard_num(boardDTO.getBoardNum());
+			boardFileDTO.setBoardNum(boardDTO.getBoardNum());
 			noticeDAO.fileAdd(boardFileDTO);
 		}
 		
-		return 1; 
+		
+		return result;//noticeDAO.add(boardDTO);
 	}
 	
 	public int update(BoardDTO boardDTO) throws Exception{
@@ -76,6 +79,18 @@ public class NoticeService implements BoardService{
 	}
 	
 	public int delete(BoardDTO boardDTO)throws Exception{
+		boardDTO = noticeDAO.detail(boardDTO);
+		// HDD에서 파일을 삭제
+		if(boardDTO.getFileDTOs() != null) {
+			
+		
+			for(BoardFileDTO boardFileDTO : boardDTO.getFileDTOs()) {
+				File file = new File(uploadPath, boardFileDTO.getFileName());
+				boolean flag = fileManager.fileDelete(file);
+			}
+		}
+		// -----------
+		int result = noticeDAO.fileDelete(boardDTO);
 		return noticeDAO.delete(boardDTO);
 	}
 

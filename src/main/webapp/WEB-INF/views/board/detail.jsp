@@ -59,8 +59,16 @@
 				                    </div>
 				
 				                </div>
+				                
+				                <div>
+				                	<c:forEach items="${detail.fileDTOs}" var="file">
+				                		<div>
+				                			 <a href="/files/${category}/${file.fileName}">${file.fileOrigin}</a>
+				                		</div>
+				                	</c:forEach>
+				                </div>
 				                <div class="card-foorer">
-				                	<c:if test="${category ne 'Notice'}">
+				                	<c:if test="${category ne 'notice'}">
 					                	<a href="./reply?boardNum=${detail.boardNum}" class="btn btn-danger">답글</a>
 				                	</c:if>
 				                </div>

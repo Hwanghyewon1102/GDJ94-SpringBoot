@@ -1,6 +1,9 @@
 package com.winter.app.board;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.winter.app.board.notice.NoticeFileDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +22,8 @@ public class BoardDTO {
 	private LocalDate boardDate;
 	private Long boardHit;
 	
-	
+	private List<NoticeFileDTO> fileDTOs;
+
 	
 	
 	
