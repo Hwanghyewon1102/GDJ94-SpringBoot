@@ -1,12 +1,14 @@
 package com.winter.app.board.notice;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,7 @@ import com.winter.app.files.FileManager;
 import com.winter.app.util.Pager;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class NoticeService implements BoardService{
 	
 	@Autowired
@@ -43,9 +46,11 @@ public class NoticeService implements BoardService{
 	}
 	
 	@Override
+	@Transactional
 	public int add(BoardDTO boardDTO, MultipartFile [] attach)throws Exception{
 		//글번호가 필요
 		int result = noticeDAO.add(boardDTO);
+		
 		System.out.println("boardNum = " + boardDTO.getBoardNum());
 		
 		if(attach == null) {
