@@ -11,4 +11,6 @@ public interface UsersDAO {
 
 	public int fileAdd(UserFileDTO userFileDTO) throws Exception;
 	public int fileDelete(UsersDTO usersDTO)throws Exception;
+
+	public UsersDTO detail(UsersDTO usersDTO);
 }

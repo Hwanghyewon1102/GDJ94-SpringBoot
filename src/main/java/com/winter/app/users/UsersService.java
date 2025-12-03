@@ -46,6 +46,19 @@ public class UsersService {
 
 
 
+	 public UsersDTO detail(UsersDTO usersDTO)throws Exception{
+		 UsersDTO loginDTO = usersDAO.detail(usersDTO);
+		 
+		 if(loginDTO != null) {
+			 if(loginDTO.getPassword().equals(usersDTO.getPassword())){
+				 return loginDTO;
+			 }else {
+				 loginDTO = null;
+			 }
+		 }
+		 
+		 return loginDTO;
+	 }
 
 
 

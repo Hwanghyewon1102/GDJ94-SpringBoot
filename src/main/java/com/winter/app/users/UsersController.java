@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/users/*")
@@ -35,4 +37,28 @@ public class UsersController {
 		return "redirect:/";
 	}
 	
+	
+	
+	
+	@GetMapping("login")
+	public void login()throws Exception{
+		
+	}
+	
+	@PostMapping("login")
+	public String login(UsersDTO usersDTO, HttpSession session)throws Exception{
+		
+		usersDTO = usersService.detail(usersDTO);
+		
+		session.setAttribute("user", usersDTO);
+		
+		return "redirect:/";
+	}
+	
+	
+//	@GetMapping("mypage")
+//	public String detail(String username,Model model)throws Exception{
+//		UsersDTO usersDTO = usersService.detail(username);
+//		model.addAttribute("user", usersDTO);
+//	}
 }

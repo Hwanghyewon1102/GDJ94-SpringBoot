@@ -31,6 +31,30 @@
             <result column="file_origin" property="fileOrigin"/>
         </collection>
     </resultMap>
+    
+    
+    <select id="detail" resultMap="detailResult" parameterType="UsersDTO">
+    		SELECT *
+			FROM users U
+				 LEFT JOIN
+			     profile PF
+			     USING(username)
+			WHERE U.username=#{username}
+    	</select>
+    	
+    	<resultMap type="UsersDTO" id="detailResult">
+    		<id column="username" property="username"/>
+    		<result column="password" property="password"/>
+    		<result column="name" property="name"/>
+    		<result column="email" property="email"/>
+    		<result column="phone" property="phone"/>
+    		<result column="birth" property="birth"/>
+    		<association property="userFileDTO" javaType="UserFileDTO">
+    			<id column="file_num" property="fileNum" />
+    			<result column="file_name" property="fileName"/>
+    			<result column="file_origin" property="fileOrigin"/>
+    		</association>
+    	</resultMap>
 
 
     
