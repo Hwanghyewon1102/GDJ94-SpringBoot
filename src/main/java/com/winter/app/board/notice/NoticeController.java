@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.winter.app.board.BoardDTO;
+import com.winter.app.board.BoardFileDTO;
+import com.winter.app.files.FileManager;
 import com.winter.app.util.Pager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +25,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NoticeController {
 
+    private final FileManager fileManager;
+
 	@Autowired
 	private NoticeService noticeService;
 	
 	@Value("${category.board.notice}")
 	private String category;
+
+    NoticeController(FileManager fileManager) {
+        this.fileManager = fileManager;
+    }
 	
 	@ModelAttribute("category")
 	public String getCategory() {
@@ -99,5 +107,13 @@ public class NoticeController {
 		int result = noticeService.delete(boardDTO);
 		
 		return "redirect:./list";
+	}
+	
+	@GetMapping("fileDown")
+	public String fileDown(BoardFileDTO boardFileDTO, Model model) throws Exception{
+		boardFileDTO = noticeService.fileDetail(boardFileDTO);
+		model.addAttribute("file", boardFileDTO);
+		
+		return "fileDownView";
 	}
 }

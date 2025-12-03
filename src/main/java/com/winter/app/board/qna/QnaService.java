@@ -93,4 +93,10 @@ public class QnaService implements BoardService {
 
         return result;
     }
+
+	@Override
+	public BoardFileDTO fileDetail(BoardFileDTO boardFileDTO) throws Exception {
+		// TODO Auto-generated method stub
+		return qnaDAO.fileDetail(boardFileDTO);
+	}
 }
