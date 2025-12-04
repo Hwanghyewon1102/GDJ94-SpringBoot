@@ -15,13 +15,14 @@
 			WHERE board_writer LIKE concat('%', #{search}, '%')
 		</if>
     </sql>
-    <select id="list" resultType="com.winter.app.board.qna.QnaDTO">
-        SELECT * FROM qna
-        <include refid="search"></include>
-         ORDER BY board_ref DESC, board_step ASC
-         LIMIT #{startNum}, #{perPage}
-    </select>
-    
+    <select id="list" resultMap="qnaDetailResult" parameterType="Pager">
+	    SELECT *
+	    FROM qna
+	    <include refid="search"/>
+	    ORDER BY board_ref DESC, board_step ASC
+	    LIMIT #{startNum}, #{perPage}
+	</select>
+
     <select id="count" resultType="Long">
 		SELECT count(board_num)
 		FROM qna	
@@ -41,7 +42,7 @@
     <select id="detail" resultMap="qnaDetailResult">
     	 SELECT * 
     		 FROM qna q 
-			 LEFT JOIN qna_file f
+			 LEFT JOIN qna_files f
 			 USING(board_num)
 			 WHERE q.board_num = #{boardNum};
     </select>
@@ -51,7 +52,7 @@
     	<result column="board_title" property="boardTitle"/>
     	<result column="board_writer" property="boardWriter"/>
     	<result column="board_contents" property="boardContents"/>
-    	<result column="board_data" property="boardData"/>
+    	<result column="board_date" property="boardDate"/>
     	<result column="board_hit" property="boardHit"/>
     	<result column="board_ref" property="boardRef"/>
     	<result column="board_step" property="boardStep"/>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,19 +39,24 @@
                     <!-- Content Row -->
                     <div class="row">                    
 	                    <!-- 생성한 contents 작성 -->
-	                    <form method="post" enctype="multipart/form-data">
-	                    	<input type="hidden" name="boardNum"  value="${dto.boardNum}"> 
-						  <div class="form-group">
-						    <label for="board_title" class="form-label">제목</label>
-						    <input type="text" class="form-control" value="${dto.boardTitle}" id="board_title" name="boardTitle">
-						  </div>
+	                    
+	                    
+<!-- form ------------------------------------------------------------------------------------------------------ -->
+						<form:form modelAttribute="dto" method="post" enctype="multipart/form-data">
+							<form:hidden path="boardNum"/>
+						
 						  <div class="form-group">
 						    <label for="board_writer" class="form-label">작성자</label>
-						    <input type="text" class="form-control" value="${dto.boardWriter}" id="board_writer" name="boardWriter">
+						    <form:input path="boardWriter" cssClass="form-control" id="writer"/>
+						  </div>
+						  <div class="form-group">
+						    <label for="board_title" class="form-label">제목</label>
+						    <form:input path="boardTitle" cssClass="form-control" id="title"/>
+						    <form:errors path="boardTitle"></form:errors>
 						  </div>
 						  <div class="form-group">
 							<label for="board_contents" class="form-label">내용</label>
-							<textarea class="form-control" id="boardContents"  rows="3" name="boardContents"> ${dto.boardContents} </textarea>
+						    <form:textarea path="boardContents" cssClass="form-control" id="contents"/>
 						  </div>
 						  <div class="form-group" id="files">
 								<button type="button" id="fileAdd">File add</button>
@@ -61,7 +67,7 @@
 							</div>
 						  
 						  <button type="submit" class="btn btn-primary">완료</button>
-						</form>
+						</form:form>
 	                    
                     </div>
             	</div>

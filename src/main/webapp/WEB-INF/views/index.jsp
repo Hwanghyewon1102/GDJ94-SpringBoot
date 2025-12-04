@@ -45,7 +45,7 @@
                     
                     <c:if test="${not empty user}">
                 		<h1>로그인 성공</h1>
-                		<spring:message code="message.welcom" arguments="${user.usersname},${user.birth}" argumentSeparator="," var="m"></spring:message>
+                		<spring:message code="message.welcom" arguments="${user.username},${user.birth}" argumentSeparator="," var="m"></spring:message>
                 		<hr />
                 		<h3>${m}</h3>
                 	</c:if>

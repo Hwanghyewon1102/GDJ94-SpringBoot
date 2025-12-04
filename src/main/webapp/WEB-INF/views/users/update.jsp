@@ -47,21 +47,8 @@
                                 	<form:form method="post" modelAttribute="userDTO" enctype="multipart/form-data">
                                 	
                                    	  
-									  <div class="form-group">
-									    <label for="username">Username</label>
-									    <form:input path="username" id="username" cssClass="form-control form-control-user"/>
-									    <form:errors path="username"></form:errors>
-									  </div>
-									  <div class="form-group">
-									    <label for="password">Password</label>
-									    <form:password path="password" id="password" cssClass="form-control form-control-user"/>
-									    <form:errors path="password"></form:errors>
-									  </div>									  
-									  <div class="form-group">
-									    <label for="password">Password</label>
-									    <form:password path="passwordCheck" id="passwordCheck" cssClass="form-control form-control-user"/>
-									    <form:errors path="passwordCheck"></form:errors>
-									  </div>									  
+																		  
+																		  
 									  <div class="form-group">
 									    <label for="name">Name</label>
 									    <form:input path="name" id="name" cssClass="form-control form-control-user"/>

@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.winter.app.board.notice.NoticeFileDTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,6 +18,7 @@ import lombok.ToString;
 @ToString
 public class BoardDTO {
 	private Long boardNum;
+	@NotBlank(message = "필수입니다")
 	private String boardTitle;
 	private String boardWriter;
 	private String boardContents;

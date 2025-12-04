@@ -41,15 +41,21 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Board Contents</h6>
                                 </div>
                                 <div class="card-body">
-                                   <img src="/files/${category}/${user.userFileDTO.fileName}">
+                                   <c:if test="${not empty user.userFileDTO}">
+								        <img src="/files/${category}/${user.userFileDTO.fileName}">
+								    </c:if>
+								    <c:if test="${empty user.userFileDTO}">
+								        <img src="/img/default_profile.png"> <%-- 기본 이미지 경로 --%>
+								    </c:if>
                                    <h3>${user.username}</h3>
-                                   <h3>${user.email}</h3>
-                                   <h3>${user.birth}</h3>
+								    <h3>${user.email}</h3>
+								    <h3>${user.birth}</h3>
                                 </div>
                                 
                                 <div class="card-footer">
                                 	
                                 	<a href="./update?boardNum=${dto.boardNum}" class="btn btn-primary">Update</a>
+                                	<a href="./change?boardNum=${dto.boardNum}" class="btn btn-primary">비번변경</a>
                                 	<form action="./delete" method="post">
                                 		<input type="hidden" name="boardNum" value="${dto.boardNum}">
                                 		<button id="del" class="btn btn-danger">Delete</button>

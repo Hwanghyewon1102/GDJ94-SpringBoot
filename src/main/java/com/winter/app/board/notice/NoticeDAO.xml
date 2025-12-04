@@ -47,14 +47,19 @@
     	</select>
     	
     	<select id="list" resultType="NoticeDTO" parameterType="Pager">
-    		SELECT * 
-    		FROM notice 
+		    SELECT
+		        board_num AS boardNum,
+		        board_title AS boardTitle,
+		        board_writer AS boardWriter,
+		        board_contents AS boardContents,
+		        board_date AS boardDate,
+		        board_hit AS boardHit
+		    FROM notice
+		    <include refid="search"></include>
+		    ORDER BY board_num DESC
+		    LIMIT #{startNum}, #{perPage}
+		</select>
 
-    		<include refid="search"></include>
-
-    		ORDER BY board_num DESC
-    		LIMIT #{startNum}, #{perPage}
-    	</select>
     	
     	
 

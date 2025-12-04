@@ -48,44 +48,21 @@
                                 	
                                    	  
 									  <div class="form-group">
-									    <label for="username">Username</label>
-									    <form:input path="username" id="username" cssClass="form-control form-control-user"/>
-									    <form:errors path="username"></form:errors>
-									  </div>
-									  <div class="form-group">
-									    <label for="password">Password</label>
+									    <label for="password">기존 Password</label>
 									    <form:password path="password" id="password" cssClass="form-control form-control-user"/>
 									    <form:errors path="password"></form:errors>
+									  </div>					
+									  <div class="form-group">
+									    <label for="password">새로운 Password</label>
+									    <form:password path="newPassword" id="newPassword" cssClass="form-control form-control-user"/>
+									    <form:errors path="newPassword"></form:errors>
 									  </div>									  
 									  <div class="form-group">
-									    <label for="password">Password</label>
+									    <label for="password">새로운 Password 확인</label>
 									    <form:password path="passwordCheck" id="passwordCheck" cssClass="form-control form-control-user"/>
 									    <form:errors path="passwordCheck"></form:errors>
 									  </div>									  
-									  <div class="form-group">
-									    <label for="name">Name</label>
-									    <form:input path="name" id="name" cssClass="form-control form-control-user"/>
-									    <form:errors path="name"></form:errors>
-									  </div>
-									  <div class="form-group">
-									    <label for="email">Email</label>
-									    <form:input path="email" id="email" cssClass="form-control form-control-user"/>
-									    <form:errors path="email"></form:errors>
-									  </div>									  
-									  <div class="form-group">
-									    <label for="phone">Phone</label>
-									    <form:input path="phone" id="phone" cssClass="form-control form-control-user"/>
-									    <form:errors path="phone"></form:errors>
-									  </div>									  
-									  <div class="form-group">
-									    <label for="birth">Birth</label>
-									    <form:input path="birth" id="birth" cssClass="form-control form-control-user" type="date"/>
-									    <form:errors path="birth"></form:errors>
-									  </div>									  
-									  <div class="form-group">
-									  	<button type="button" id="fileAdd"  class="form-control btn btn-primary" >File Add</button>
-									  	
-									  </div>
+									 
 									  
 									  <div id="files" class="form-group">
 									  
