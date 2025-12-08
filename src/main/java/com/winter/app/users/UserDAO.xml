@@ -12,17 +12,25 @@
 			INSERT INTO profile (file_name, file_origin, username)
 			(#{fileName}, #{fileOrigin}, #{username})
 		</insert>
+		
+		<insert id="roleAdd" parameterType="UserDTO">
+			INSERT INTO user_role (username, role_num) VALUES(#{username}, 3)
+		</insert>
     	
     	
-    	
+    	<select id="findByUsername" resultType="UserDTO" parameterType="String">
+		    SELECT *
+		    FROM users
+		    WHERE username = #{username}
+		</select>
     	
     	<select id="detail" resultMap="detailResult" parameterType="UserDTO">
-    		SELECT *
-			FROM users U
-				 LEFT JOIN
-			     profile PF
-			     USING(username)
-			WHERE U.username=#{username}
+			SELECT * 
+			FROM users u 
+			LEFT JOIN profile p USING (username)
+			LEFT JOIN user_role ur USING (username)
+			LEFT JOIN role R USING (role_num)
+			WHERE u.username = #{username};
     	</select>
     	
     	<resultMap type="UserDTO" id="detailResult">
@@ -37,6 +45,10 @@
     			<result column="file_name" property="fileName"/>
     			<result column="file_origin" property="fileOrigin"/>
     		</association>
+    		<collection property="roleDTOs" javaType="java.util.List" ofType="RoleDTO">
+    			<id column="role_num" property="roleNum"/>
+    			<result column="role_name" property="roleName"/>
+    		</collection>
     	</resultMap>
 
     	
@@ -51,7 +63,7 @@
     			phone=#{phone}
     			</if>
     			<if test="birth != null">
-    			birth=#{brith}
+    			birth=#{birth}
     			</if>
     		</set>
     		WHERE username=#{username}
@@ -68,5 +80,6 @@
 			WHERE username=#{username}
 		</update>
     
+
     
     </mapper>

@@ -8,8 +8,10 @@ public interface UserDAO {
 	public int register(UserDTO userDTO)throws Exception;
 	public int userFileAdd(UserFileDTO userFileDTO)throws Exception;
 	public UserDTO detail(UserDTO userDTO)throws Exception;
+	public int roleAdd(UserDTO userDTO)throws Exception;
 	
 	
 	public int update(UserDTO userDTO)throws Exception;
 	public int change(UserDTO userDTO)throws Exception;
+	public UserDTO findByUsername(String username) throws Exception;
 }

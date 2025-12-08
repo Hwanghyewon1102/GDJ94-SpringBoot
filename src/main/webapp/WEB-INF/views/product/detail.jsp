@@ -39,7 +39,7 @@
                     <!-- 생성한 contents 작성 -->
 					<div class="col-12">
 					    <div class="card shadow p-4">
-					
+							 <input type="hidden" name="productNum" value="${dto.productNum}">
 					        <!-- 상품 카테고리 -->
 					        <div class="text-primary font-weight-bold text-uppercase mb-2" style="font-size: 0.9rem;">
 					            ${dto.productCategory}

@@ -5,9 +5,24 @@
 
 <mapper namespace="com.winter.app.product.ProductDAO">
 
+  <sql id="search">
+   		 <if test="kind == 'k1'">
+			WHERE  products_name LIKE concat('%', #{search}, '%')
+		</if>
+		<if test="kind == 'k2'">
+			WHERE  products_contents LIKE concat('%', #{search}, '%')
+		</if>
+		<if test="kind == 'k3'">
+			WHERE  products_category LIKE concat('%', #{search}, '%')
+		</if>
+    </sql>
+
     <!-- 리스트 -->
-    <select id="list" parameterType="ProductDTO" resultType="ProductDTO">
-        SELECT * FROM products
+     <select id="list" resultType="ProductDTO" parameterType="ProductDTO">
+    	SELECT * FROM products
+    	<include refid="search"></include>
+    	ORDER BY products_num DESC
+		LIMIT #{startNum}, #{perPage}
     </select>
 
     <!-- 상세 조회 -->
@@ -64,5 +79,12 @@
         INSERT INTO comment 
         VALUES (NULL, #{boardContents}, NOW(), #{productNum}, #{username})
     </insert>
+    
+    
+        <select id="count" resultType="Long">
+		SELECT count(products_num)
+		FROM products	
+		<include refid="search"></include>
+	</select>
 
 </mapper>

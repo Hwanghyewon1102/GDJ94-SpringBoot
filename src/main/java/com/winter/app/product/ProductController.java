@@ -24,10 +24,16 @@ public class ProductController {
 	private ProductService productService;
 	
 	//리스트 보기
+
 	@GetMapping("list")
-	public void list(Model model) throws Exception {
-		List<ProductDTO> product =  productService.list();
-		model.addAttribute("list", product);
+	public String list(Model model, Pager pager)throws Exception{
+		
+		 List<ProductDTO> list = productService.list(pager);
+		 model.addAttribute("list", list);
+		
+	    model.addAttribute("pager", pager);
+
+		return "product/list";
 	}
 	
 	//상세 조회

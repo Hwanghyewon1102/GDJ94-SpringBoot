@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,9 @@ public class UserService {
 	@Value("${app.upload.user}")
 	private String uploadPath;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	public boolean getError(UserDTO userDTO, BindingResult bindingResult) throws Exception{
 		// check: true -> 검증 실패, error 존재
 		// check: false -> 검증 성공, error 미존재
@@ -37,13 +41,18 @@ public class UserService {
 		}
 		
 		// 3. id 중복 체크
+
+
+		// UserService.getError()
 		if(userDTO.getUsername() != null) {
-			UserDTO idcheck = userDAO.detail(userDTO);
-			if(idcheck != null) {
-				check = true;
-				bindingResult.rejectValue("username", "user.id.equal");
-			}
+			UserDTO idcheck = userDAO.detail(userDTO); 
+		    if(idcheck != null) {
+		        check = true;
+		        bindingResult.rejectValue("username", "user.id.equal");
+		    }
 		}
+
+
 		if (userDTO.getPassword() != null && userDTO.getUsername() != null) {
 	        UserDTO db = userDAO.detail(userDTO); 
 	        
@@ -67,7 +76,14 @@ public class UserService {
 	public int register(UserDTO userDTO, MultipartFile profile)throws Exception{
 		int result=0;
 		
+		passwordEncoder.matches(uploadPath, uploadPath);
+		
+		userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		
+		
 		result = userDAO.register(userDTO);
+
+		result = userDAO.roleAdd(userDTO);
 		
 		if(profile == null || profile.isEmpty()) {
 			return result;
@@ -86,20 +102,18 @@ public class UserService {
 		
 		return result;
 	}
-	public UserDTO detail(UserDTO userDTO)throws Exception{
-		UserDTO loginDTO = userDAO.detail(userDTO);
-		
-		if(loginDTO != null) {
-			if(loginDTO.getPassword().equals(userDTO.getPassword())) {
-				return loginDTO;
-			}else {
-				loginDTO = null;
-			}
-		}
-		
-		
-		return loginDTO;
+	
+	
+	
+	public UserDTO detail(UserDTO userDTO) throws Exception {
+	    UserDTO dbUser = userDAO.detail(userDTO);
+	    // 로그인 체크 시
+	    if(dbUser != null && passwordEncoder.matches(userDTO.getPassword(), dbUser.getPassword())) {
+	        return dbUser;
+	    }
+	    return null; // 로그인 실패
 	}
+
 	
 	
 	public int update(UserDTO userDTO)throws Exception{

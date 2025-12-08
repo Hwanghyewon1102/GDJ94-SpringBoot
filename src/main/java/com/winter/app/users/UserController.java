@@ -46,7 +46,7 @@ public class UserController {
 		if(bindingResult.hasErrors()) {
 			return "users/register";
 		}
-		// int result = userService.register(userDTO, attach);
+		 int result = userService.register(userDTO, attach);
 		
 		return "redirect:/";
 	}
@@ -56,17 +56,7 @@ public class UserController {
 	@GetMapping("login")
 	public void login()throws Exception{}	
 	
-	@PostMapping("login")
-	public String login(UserDTO userDTO, HttpSession session)throws Exception{
-		
-		
-		userDTO = userService.detail(userDTO);
-		
-		
-		session.setAttribute("user", userDTO);
-		
-		return "redirect:/";
-	}
+	
 	
 	@GetMapping("update")
 	public void update(HttpSession session, Model model)throws Exception{
