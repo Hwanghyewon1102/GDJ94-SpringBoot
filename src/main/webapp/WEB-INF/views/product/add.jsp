@@ -1,93 +1,122 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<c:import url="/WEB-INF/views/template/head.jsp"></c:import>
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Product Add</title>
+    <c:import url="/WEB-INF/views/template/head.jsp"/>
+
+    <style>
+        .form-section {
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        label {
+            font-weight: 600;
+        }
+    </style>
 </head>
+
 <body id="page-top">
-	<div id="wrapper">
-		<!-- side bar -->
-		<c:import url="/WEB-INF/views/template/sidebar.jsp"></c:import>
-		<!-- side bar -->
-		
-		<!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-        
- 	        <!-- Main Content -->
-            <div id="content">
-            
-            	<!-- topbar -->
-            	<c:import url="/WEB-INF/views/template/topbar.jsp"></c:import>
-            	<!-- topbar -->
-            	
-            	<!-- Begin Page Content -->
-            	<div class="container-fluid">
-            	
-            		<!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">상품</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                    </div>
-                    
-                    <!-- Content Row -->
-                    <div class="row">                    
-	                    <!-- 생성한 contents 작성 -->
-	                    <form method="post">
-	                    	<input type="hidden" name="productsNum"  value="${dto.productsNum}"> 
-						  <div class="form-group">
-						    <label for="productsName" class="form-label">상품이름</label>
-						    <input type="text" class="form-control" value="${dto.productsName}" id="productsName" name="productsName">
-						  </div>
-						  <div class="form-group">
-							<label for="productsContents" class="form-label">상품설명</label>
-							<textarea class="form-control" id="productsContents"  rows="3" name="productsContents"> ${dto.productsContents} </textarea>
-						  </div>
-						  <div class="form-group">
-						    <label for="productsCategory" class="form-label">상품분류</label>
-						    <input type="text" class="form-control" value="${dto.productsCategory}" id="productsCategory" name="productsCategory">
-						  </div>
-						  <div class="form-group">
-						    <label for="productsRate" class="form-label">이자율</label>
-						    <input type="text" class="form-control" value="${dto.productsRate}" id="productsRate" name="productsRate">
-						  </div>
-						  <div class="form-group">
-						    <label for="productsSale" class="form-label">판매여부</label>
-						    <input type="text" class="form-control" value="${dto.productsSale}" id="productsSale" name="productsSale">
-						  </div>
-						  <button type="submit" class="btn btn-primary">완료</button>
-						</form>
-	                    
-                    </div>
-            	</div>
-            	<!-- container-fulid -->
-            </div>
-        	<!-- end mian -->
-        	
-        	<!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <c:import url="/WEB-INF/views/template/sidebar.jsp"/>
+    <!-- Sidebar End -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <div id="content">
+
+            <!-- Topbar -->
+            <c:import url="/WEB-INF/views/template/topbar.jsp"/>
+            <!-- Topbar End -->
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">${kind} Product</h1>
+
+                    <a href="/product/list" class="btn btn-sm btn-secondary shadow-sm">
+                        <i class="fas fa-list fa-sm text-white-50"></i> Back to List
+                    </a>
                 </div>
-            </footer>
-            <!-- End of Footer -->
+
+                <!-- Form Section -->
+                <div class="form-section">
+
+                    <form method="post">
+						
+						<!-- productNum -->
+						<input type="hidden" value="${dto.productNum}" name="productNum">
+                        <!-- Name -->
+                        <div class="form-group mb-3">
+                            <label>상품명</label>
+                            <input type="text" class="form-control" name="productName" value="${dto.productName}" required>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="form-group mb-3">
+                            <label>카테고리</label>
+                            <input type="text" class="form-control" name="productCategory" value="${dto.productCategory}" required>
+                        </div>
+
+                        <!-- Rate -->
+                        <div class="form-group mb-3">
+                            <label>이율 (%)</label>
+                            <input type="number" step="0.01" class="form-control" name="productRate" value="${dto.productRate}" required>
+                        </div>
+
+                        <!-- Contents -->
+                        <div class="form-group mb-3">
+                            <label>내용</label>
+                            <textarea class="form-control" name="productContents" rows="5" required>${dto.productContents}</textarea>
+                        </div>
+
+                        <!-- Sale -->
+                        <div class="form-group mb-4">
+                            <label>판매 상태</label>
+                            <select class="form-control" name="productSale">
+                                <option value="0">판매중</option>
+                                <option value="1">판매중지</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-save"></i> 상품 등록
+                        </button>
+
+                    </form>
+
+                </div>
+                <!-- END Section -->
+
+            </div>
+
         </div>
-        
-        
-	</div>
-	
-	<c:import url="/WEB-INF/views/template/foot.jsp"></c:import>
-	
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-bs4.min.js"></script>
-    <script type="text/javascript">
-    	$("#productsContents").summernote()
-    </script>
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Your Website 2021</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+</div>
+
+<c:import url="/WEB-INF/views/template/foot.jsp"/>
+
 </body>
 </html>

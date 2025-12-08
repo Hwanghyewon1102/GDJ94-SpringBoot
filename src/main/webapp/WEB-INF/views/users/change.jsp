@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>    
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>   
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,32 +44,26 @@
                                     <h6 class="m-0 font-weight-bold text-primary">${category}</h6>
                                 </div>
                                 <div class="card-body">
-                                	<form:form method="post" modelAttribute="userDTO" enctype="multipart/form-data">
-                                	
-                                   	  
+                                   <form:form method="post" modelAttribute="userDTO" enctype="multipart/form-data">	
 									  <div class="form-group">
 									    <label for="password">기존 Password</label>
-									    <form:password path="password" id="password" cssClass="form-control form-control-user"/>
-									    <form:errors path="password"></form:errors>
-									  </div>					
+									    <input type="password" class="form-control" name="exist">
+									    
+									  	
+									  </div>						
 									  <div class="form-group">
 									    <label for="password">새로운 Password</label>
-									    <form:password path="newPassword" id="newPassword" cssClass="form-control form-control-user"/>
-									    <form:errors path="newPassword"></form:errors>
-									  </div>									  
+									    <form:password path="password" cssClass="form-control"  id="password"/>
+									  	<form:errors path="password"></form:errors>
+									  </div>
 									  <div class="form-group">
-									    <label for="password">새로운 Password 확인</label>
-									    <form:password path="passwordCheck" id="passwordCheck" cssClass="form-control form-control-user"/>
-									    <form:errors path="passwordCheck"></form:errors>
+									    <label for="password">새로운 Password</label>
+									    <form:password path="passwordCheck" cssClass="form-control"  id="passwordCheck"/>
+									  	<form:errors path="passwordCheck"></form:errors>
 									  </div>									  
 									 
-									  
-									  <div id="files" class="form-group">
-									  
-									  </div>
-									
 									  <button type="submit" class="btn btn-primary">Submit</button>
-                                	</form:form>
+									</form:form>
                                 </div>
                              </div>
                              

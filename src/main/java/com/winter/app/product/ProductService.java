@@ -1,38 +1,71 @@
 package com.winter.app.product;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.winter.app.config.MessageConfig;
+import com.winter.app.util.Pager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.winter.app.util.Pager;
-
 @Service
-public class ProductService{
+public class ProductService {
+
+    private final MessageConfig messageConfig;
 	
 	@Autowired
 	private ProductDAO productDAO;
 
-	public List<ProductDTO> list(Pager pager) throws Exception {
-		Long totalCount = productDAO.count(pager);
-		pager.pageing(totalCount);
-		return productDAO.list(pager);
+    ProductService(MessageConfig messageConfig) {
+        this.messageConfig = messageConfig;
+    }
+	
+	// 리스트 보기
+	public List<ProductDTO> list() throws Exception {
+		return productDAO.list();
 	}
-
+	
+	// 상세 조회
 	public ProductDTO detail(ProductDTO productDTO) throws Exception {
 		return productDAO.detail(productDTO);
 	}
-
+	
+	// 상품 추가
 	public int add(ProductDTO productDTO) throws Exception {
 		return productDAO.add(productDTO);
 	}
-
-	public int update(ProductDTO productDTO) throws Exception {
-		return productDAO.update(productDTO);
-	}
-
+	
+	
+	// 상품 삭제
 	public int delete(ProductDTO productDTO) throws Exception {
 		return productDAO.delete(productDTO);
 	}
+	
+	// 상품 수정
+	public int update(ProductDTO productDTO) throws Exception {
+		
+		return productDAO.update(productDTO);
+	}
+	
+	//--------------------------------------------------
+	public List<ProductCommentDTO> commentList(ProductCommentDTO productCommentDTO, Pager pager)throws Exception{
+		pager.setPerPage(5L);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("product", productCommentDTO);
+		map.put("pager", pager);
+		
+		pager.pageing(productDAO.commentCount(productCommentDTO));
+		
+		return productDAO.commentList(map);
+	}
+	
+	public int commentAdd(ProductCommentDTO productCommentDTO)throws Exception{
+		return productDAO.commentAdd(productCommentDTO);
+	}
+	
+	
 	
 }
