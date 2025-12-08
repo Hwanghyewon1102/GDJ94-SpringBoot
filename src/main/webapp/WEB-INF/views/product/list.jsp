@@ -65,7 +65,7 @@
                     <!-- Content Row -->
                     <div class="row">
                     
-					    <c:forEach items="${dto}" var="p">
+					    <c:forEach items="${list}" var="p">
 					
 					        <div class="col-xl-3 col-md-6 mb-4">
 					

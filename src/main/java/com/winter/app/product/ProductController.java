@@ -27,7 +27,7 @@ public class ProductController {
 	@GetMapping("list")
 	public void list(Model model) throws Exception {
 		List<ProductDTO> product =  productService.list();
-		model.addAttribute("dto", product);
+		model.addAttribute("list", product);
 	}
 	
 	//상세 조회
@@ -98,9 +98,11 @@ public class ProductController {
 	
 	//-----------------------------------------------------
 	@GetMapping("commentList")
-	public void  commentList(ProductCommentDTO productCommentDTO, Pager pager, Model model)throws Exception{
-		List<ProductCommentDTO> list = productService.commentList(productCommentDTO, pager);
-		model.addAttribute("list", list);
+	public String commentList(ProductCommentDTO dto, Pager pager, Model model) throws Exception {
+	    List<ProductCommentDTO> list = productService.commentList(dto, pager);
+	    model.addAttribute("list", list);
+	    model.addAttribute("pager", pager);
+	    return "product/commentList";
 	}
 	
 	@PostMapping("commentAdd")
