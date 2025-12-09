@@ -48,7 +48,6 @@
                                 		${param.message}
                                 	</div>
                                    <form method="post">
-                                   	  
 									  <div class="form-group">
 									    <label for="writer">Username</label>
 									    <input type="text" class="form-control"  id="username" name="username">
@@ -58,6 +57,10 @@
 									    <input type="password" class="form-control"  id="password" name="password">
 									  </div>									  
 									 
+                                   	   <div class="form-group form-check">
+									    <input type="checkbox" name="rememberme" class="form-check-input" id="exampleCheck1">
+									    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+									  </div>
 									
 									  <button type="submit" class="btn btn-primary">Submit</button>
 									</form>
