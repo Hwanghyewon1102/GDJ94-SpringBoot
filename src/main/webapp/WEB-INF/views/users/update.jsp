@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>    
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,10 +46,7 @@
                                 </div>
                                 <div class="card-body">
                                 	<form:form method="post" modelAttribute="userDTO" enctype="multipart/form-data">
-                                	
-                                   	  
-																		  
-																		  
+								    <sec:csrfInput />
 									  <div class="form-group">
 									    <label for="name">Name</label>
 									    <form:input path="name" id="name" cssClass="form-control form-control-user"/>

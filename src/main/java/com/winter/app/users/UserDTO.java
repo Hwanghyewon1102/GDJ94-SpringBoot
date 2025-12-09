@@ -22,6 +22,9 @@ import lombok.ToString;
 @ToString
 public class UserDTO implements UserDetails{
 	
+	
+	
+	
 	@NotBlank(groups = {RegisterGroup.class})
 	private String username;
 	
@@ -48,7 +51,9 @@ public class UserDTO implements UserDetails{
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
-		return true;
+		// 사용자 계정의 유효 기간이 만료 되었습니다.
+		// AccountExpiredException
+		return this.accountNonExpired;
 	}
 
 
@@ -57,7 +62,9 @@ public class UserDTO implements UserDetails{
 	@Override
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
-		return true;
+		// 사용자 계정이 잠겨 있습니다.
+		//LockedException
+		return this.accountNonLocked;
 	}
 
 
@@ -66,7 +73,10 @@ public class UserDTO implements UserDetails{
 	@Override
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
-		return true;
+		// 자격 증명 유효 기간이 만료되었습니다.
+		// CredentialsExpiredException
+		
+		return this.credentialsNonExpired;
 	}
 
 
@@ -75,7 +85,9 @@ public class UserDTO implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return true;
+		// 유효하지 않은 사용자입니다.
+		// DisabledException
+		return this.enabled;
 	}
 
 
@@ -103,5 +115,11 @@ public class UserDTO implements UserDetails{
 	
 	
 	private List<RoleDTO> roleDTOs;
+	
+	
+	private boolean accountNonExpired;
+	private boolean accountNonLocked;
+	private boolean credentialsNonExpired;
+	private boolean enabled;
 
 }

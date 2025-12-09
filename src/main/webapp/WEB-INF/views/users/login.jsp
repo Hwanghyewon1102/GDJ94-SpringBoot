@@ -43,6 +43,10 @@
                                     <h6 class="m-0 font-weight-bold text-primary">${category}</h6>
                                 </div>
                                 <div class="card-body">
+                                
+                                	<div>
+                                		${param.message}
+                                	</div>
                                    <form method="post">
                                    	  
 									  <div class="form-group">

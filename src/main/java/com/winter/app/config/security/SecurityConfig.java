@@ -1,5 +1,6 @@
 package com.winter.app.config.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	@Autowired
+    private final LoginSuccessHandler loginSuccessHandler;
+	
+	@Autowired
+	private LoginFailHandler loginFailHandler;
+	
+	@Autowired
+	private Logout logout;
+	
+	@Autowired
+	private LogoutSucess logoutSucess;
+
+    SecurityConfig(LoginSuccessHandler loginSuccessHandler) {
+        this.loginSuccessHandler = loginSuccessHandler;
+    }
 
 	// 정적자원들을 Security에서 제외
 	@Bean
@@ -48,15 +64,21 @@ public class SecurityConfig {
 		        	form
 		        	// 로그인폼 jsp경로로 가는 url과 로그인 처리 url작성
 		            .loginPage("/users/login")
+		            // 로그인 진행할 URL
+		            .loginProcessingUrl("/users/login")
 		            // .usernameParameter("id")
 		            // .passwordParameter("pw") 생략가능
- 		            .defaultSuccessUrl("/")
+ 		            // .defaultSuccessUrl("/")
  		            // .failureUrl("/")
+		            .successHandler(loginSuccessHandler)
+		            .failureHandler(loginFailHandler)
 		        )
 
 		        .logout(logout -> logout
 		            .logoutUrl("/users/logout")   
-		            .logoutSuccessUrl("/")
+		            // .logoutSuccessUrl("/")
+		            .addLogoutHandler(this.logout)
+		            .logoutSuccessHandler(logoutSucess)
 		            .invalidateHttpSession(true)
 		            .deleteCookies("JSESSIONID")
 		        );

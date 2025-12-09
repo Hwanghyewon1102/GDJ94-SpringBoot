@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>    
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>   
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,6 +48,7 @@
 								    <c:if test="${empty user.userFileDTO}">
 								        <img src="/img/default_profile.png"> <%-- 기본 이미지 경로 --%>
 								    </c:if>
+	                    	<sec:authentication property="principal" var="user"/>
                                    <h3>${user.username}</h3>
 								    <h3>${user.email}</h3>
 								    <h3>${user.birth}</h3>

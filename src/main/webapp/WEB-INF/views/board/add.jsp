@@ -47,7 +47,7 @@
 						
 						  <div class="form-group">
 						    <label for="board_writer" class="form-label">작성자</label>
-						    <form:input path="boardWriter" cssClass="form-control" id="writer"/>
+						    <%-- <form:input path="boardWriter" disabled cssClass="form-control" id="writer"/> --%>
 						  </div>
 						  <div class="form-group">
 						    <label for="board_title" class="form-label">제목</label>
