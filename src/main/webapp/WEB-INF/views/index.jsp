@@ -65,6 +65,7 @@
                     
                     <sec:authorize access="!isAuthenticated()">
                 		<h1>로그인 필요</h1>
+                		<a href="/oauth2/authorization/kakao">카카오로그인</a>
                     </sec:authorize>
                     
                     <!-- 생성한 contents 작성 -->

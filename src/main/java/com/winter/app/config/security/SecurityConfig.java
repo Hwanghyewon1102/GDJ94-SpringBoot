@@ -1,5 +1,6 @@
 package com.winter.app.config.security;
 
+import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.winter.app.users.UserDetailServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +27,9 @@ public class SecurityConfig {
 	
 	@Autowired
 	private LogoutSucess logoutSucess;
+	
+	@Autowired
+	private UserDetailServiceImpl userDetailServiceImpl;
 
     SecurityConfig(LoginSuccessHandler loginSuccessHandler) {
         this.loginSuccessHandler = loginSuccessHandler;
@@ -81,7 +87,39 @@ public class SecurityConfig {
 		            .logoutSuccessHandler(logoutSucess)
 		            .invalidateHttpSession(true)
 		            .deleteCookies("JSESSIONID")
-		        );
+		            .deleteCookies("remember-me")
+		        )
+		        
+		        
+		        .rememberMe(remember -> {
+		        	remember
+		        		.rememberMeParameter("rememberme")
+		        		.tokenValiditySeconds(60)
+		        		.key("rememberkey")
+		        		.userDetailsService(userDetailServiceImpl)
+		        		.authenticationSuccessHandler(loginSuccessHandler)
+		        		.useSecureCookie(false)
+		        		;
+		        })
+		        
+		        .sessionManagement(session -> {
+		        	session
+		        		.invalidSessionUrl("/")
+		        		.maximumSessions(1)
+		        		.maxSessionsPreventsLogin(true) // true: 현재 사용자 로그인 못하게 막음
+		        		
+		        		;
+		        })
+		        
+		        .oauth2Login(t -> {
+		        	t.userInfoEndpoint((s) -> {
+		        		s.userService(userDetailServiceImpl);
+		        	});
+		        	
+		        })
+		        
+		        
+		        ;
 
 
 		    return security.build();
