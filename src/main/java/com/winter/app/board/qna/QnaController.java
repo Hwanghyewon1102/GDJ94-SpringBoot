@@ -124,20 +124,18 @@ public class QnaController {
 	}
 	
 	
-	// 예외 처리 메서드
+	//예외 처리 메서드
 	@ExceptionHandler(NullPointerException.class)
 	public String exc1(Model model) {
-		System.out.println("====== 여기로 들어옴! ======");
+		
 		return "error/error_page";
 	}
 	
-	
-//	@ExceptionHandler(NullPointerException.class)
-//	public String exc2(Model model) {
-//		
-//		return "error/error_page";
-//	}
-	
+	@ExceptionHandler(Exception.class)
+	public String exc2(Model model) {
+		
+		return "error/error_page";
+	}
 	
 	@ExceptionHandler(Throwable.class)
 	public String exc3(Model model) {

@@ -44,7 +44,7 @@
 					<spring:message code="hello" text="키가 없을 때 기본 메시지"></spring:message>                    
                     </div>
                     
-                    
+                    <h1>Remote Test</h1>
                     <sec:authorize access="isAuthenticated()">
                 		<h1>로그인 성공</h1>
                 		<sec:authentication property="principal" var="user" />
