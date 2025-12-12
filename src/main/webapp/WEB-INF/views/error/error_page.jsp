@@ -37,7 +37,7 @@
                     
                     <!-- Content Row -->
                     <div class="row">
-                    
+                    <h1>에러발생</h1>
                     <!-- 생성한 contents 작성 -->
                     
                     </div>

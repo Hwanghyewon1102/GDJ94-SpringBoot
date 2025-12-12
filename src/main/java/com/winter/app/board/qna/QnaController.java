@@ -38,9 +38,9 @@ public class QnaController {
 	
 	@GetMapping("list")
 	public String list(Model model, Pager pager, Long page) throws Exception {
-		if(pager != null) {
-			throw new NullPointerException();
-		}
+//		if(pager != null) {
+//			throw new NullPointerException();
+//		}
 		
 		List<BoardDTO> list = qnaService.list(pager); 
 		model.addAttribute("list", list);
@@ -127,7 +127,7 @@ public class QnaController {
 	// 예외 처리 메서드
 	@ExceptionHandler(NullPointerException.class)
 	public String exc1(Model model) {
-		
+		System.out.println("====== 여기로 들어옴! ======");
 		return "error/error_page";
 	}
 	
