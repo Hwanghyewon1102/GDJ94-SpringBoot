@@ -2,6 +2,7 @@ package com.winter.app.home;
 
 import java.security.Principal;
 import java.util.Enumeration;
+import java.util.Random;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,8 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 public class HomeController {
 	
 	@GetMapping("/")
-	public String home() {
+	public String home() throws Exception{
+		Random random = new Random();
+		 
+		int num = random.nextInt(2);
 		
+		if(num%2 == 0) {
+			throw new Exception();
+		}
 		return "index";
 	}
 	
