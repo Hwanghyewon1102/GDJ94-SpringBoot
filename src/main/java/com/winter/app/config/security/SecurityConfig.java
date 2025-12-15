@@ -4,10 +4,12 @@ import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,9 +36,17 @@ public class SecurityConfig {
 	@Autowired
 	private UserDetailServiceImpl userDetailServiceImpl;
 	
+	
+	
+	
+	// --------------------- JWT 추가 --------------------------------
+	
 	@Autowired
 	private JwtTokenManager jwtTokenManager;
 
+	@Autowired
+	private AuthenticationConfiguration authenticationConfiguration;
+	
     SecurityConfig(LoginSuccessHandler loginSuccessHandler) {
         this.loginSuccessHandler = loginSuccessHandler;
     }
@@ -110,7 +120,8 @@ public class SecurityConfig {
 		        	h.disable();
 		        })
 		        
-		        .addFilter(new JwtLoginFilter(jwtTokenManager))
+		        .addFilter(new JwtLoginFilter(jwtTokenManager, authenticationConfiguration.getAuthenticationManager()))
+		        
 		        
 		        .oauth2Login(t -> {
 		        	t.userInfoEndpoint((s) -> {
