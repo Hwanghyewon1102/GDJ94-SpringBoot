@@ -47,7 +47,7 @@
                                 	<div>
                                 		${param.message}
                                 	</div>
-                                   <form method="post">
+                                   <form method="post" action="/users/loginProcess">
 									  <div class="form-group">
 									    <label for="writer">Username</label>
 									    <input type="text" class="form-control"  id="username" name="username">

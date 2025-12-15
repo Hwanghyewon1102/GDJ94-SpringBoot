@@ -7,10 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.winter.app.config.security.jwt.JwtLoginFilter;
+import com.winter.app.config.security.jwt.JwtTokenManager;
 import com.winter.app.users.UserDetailServiceImpl;
 
 @Configuration
@@ -30,6 +33,9 @@ public class SecurityConfig {
 	
 	@Autowired
 	private UserDetailServiceImpl userDetailServiceImpl;
+	
+	@Autowired
+	private JwtTokenManager jwtTokenManager;
 
     SecurityConfig(LoginSuccessHandler loginSuccessHandler) {
         this.loginSuccessHandler = loginSuccessHandler;
@@ -66,19 +72,10 @@ public class SecurityConfig {
 		        
 		        // 로그인 form과 그외 관련 설정
 
-		        .formLogin(form -> 
-		        	form
-		        	// 로그인폼 jsp경로로 가는 url과 로그인 처리 url작성
-		            .loginPage("/users/login")
-		            // 로그인 진행할 URL
-		            .loginProcessingUrl("/users/login")
-		            // .usernameParameter("id")
-		            // .passwordParameter("pw") 생략가능
- 		            // .defaultSuccessUrl("/")
- 		            // .failureUrl("/")
-		            .successHandler(loginSuccessHandler)
-		            .failureHandler(loginFailHandler)
-		        )
+		        .formLogin((form) -> {
+			        // front 분리
+			         form.disable();//폼 비활성화
+		        })
 
 		        .logout(logout -> logout
 		            .logoutUrl("/users/logout")   
@@ -88,6 +85,7 @@ public class SecurityConfig {
 		            .invalidateHttpSession(true)
 		            .deleteCookies("JSESSIONID")
 		            .deleteCookies("remember-me")
+		            .deleteCookies("access-token", "refresh-token")
 		        )
 		        
 		        
@@ -104,12 +102,15 @@ public class SecurityConfig {
 		        
 		        .sessionManagement(session -> {
 		        	session
-		        		.invalidSessionUrl("/")
-		        		.maximumSessions(1)
-		        		.maxSessionsPreventsLogin(true) // true: 현재 사용자 로그인 못하게 막음
+		        		.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
 		        		
-		        		;
+		        		
 		        })
+		        .httpBasic((h) -> {
+		        	h.disable();
+		        })
+		        
+		        .addFilter(new JwtLoginFilter(jwtTokenManager))
 		        
 		        .oauth2Login(t -> {
 		        	t.userInfoEndpoint((s) -> {
