@@ -75,7 +75,7 @@
     	</update>
 
 
-		<update id="change">
+		<update id="change" parameterType="UserDTO">
 			UPDATE users
 			<set>
 				<if test="newPassword != null and !newPassword.equals('')">
@@ -85,6 +85,12 @@
 			WHERE username=#{username}
 		</update>
     
+
+
+
+
+
+
 
     
     </mapper>

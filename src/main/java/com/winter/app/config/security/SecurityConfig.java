@@ -1,6 +1,5 @@
 package com.winter.app.config.security;
 
-import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,20 +8,23 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.winter.app.config.security.jwt.JwtAuthenticationFilter;
 import com.winter.app.config.security.jwt.JwtLoginFilter;
 import com.winter.app.config.security.jwt.JwtTokenManager;
 import com.winter.app.users.UserDetailServiceImpl;
 
+import jakarta.websocket.Session;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
 	@Autowired
-    private final LoginSuccessHandler loginSuccessHandler;
+	private LoginSuccessHandler loginSuccessHandler;
 	
 	@Autowired
 	private LoginFailHandler loginFailHandler;
@@ -34,113 +36,107 @@ public class SecurityConfig {
 	private LogoutSucess logoutSucess;
 	
 	@Autowired
-	private UserDetailServiceImpl userDetailServiceImpl;
+	private UserDetailServiceImpl detailSerivceImpl;
 	
-	
-	
-	
-	// --------------------- JWT 추가 --------------------------------
+	//----------- JWT 추가 ------------------------------------
 	
 	@Autowired
 	private JwtTokenManager jwtTokenManager;
-
+	
 	@Autowired
 	private AuthenticationConfiguration authenticationConfiguration;
 	
-    SecurityConfig(LoginSuccessHandler loginSuccessHandler) {
-        this.loginSuccessHandler = loginSuccessHandler;
-    }
-
-	// 정적자원들을 Security에서 제외
+	//정적자원들을 Security에서 제외
 	@Bean
 	WebSecurityCustomizer customizer() {
+		
 		return web -> {
 			web
-			.ignoring()
-				.requestMatchers("/css/**")
-				.requestMatchers("/images/**", "/img/**", "/js/**", "/vendor/**");
-				
+				.ignoring()
+					.requestMatchers("/css/**")
+					.requestMatchers("/images/**", "/img/**")
+					.requestMatchers("/js/**", "/vendor/**")
+					;
 		};
+		
+	} 
+	
+	//인증과 인가에 관한 설정
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
+		
+		security
+			.cors((cors)->{cors.disable();})
+			.csrf((csrf)->{csrf.disable();})
+			
+			//인가(권한)에 관한 설정
+			.authorizeHttpRequests((auth)->{
+				auth
+					.requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
+					.requestMatchers("/product/add", "/product/update", "/product/delete").hasAnyRole("MANAGER", "ADMIN")
+					.requestMatchers("/product/**").authenticated()
+					.requestMatchers("/user/mypage", "/user/update", "/user/logout").authenticated()
+					.anyRequest().permitAll()
+					;
+			})
+			
+			//Login form과 그외 관련 설정
+			.formLogin((form)->{
+				//front 분리
+				form.disable();
+						
+			})
+			
+			.logout((logout)->{
+				logout
+					.logoutUrl("/users/logout")
+					//.logoutSuccessUrl("/")
+					.addLogoutHandler(this.logout)
+					//.logoutSuccessHandler(logoutSucess)
+					.invalidateHttpSession(true)
+					.deleteCookies("JSESSIONID")
+					.deleteCookies("remember-me")
+					.deleteCookies("access-token", "refresh-token")
+					;
+			})
+			
+			.sessionManagement(session ->{
+				session
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+						;
+			})
+			
+			.httpBasic((h)->{
+				h.disable();
+			})
+			
+			.addFilter(new JwtAuthenticationFilter(jwtTokenManager, authenticationConfiguration.getAuthenticationManager()))
+			.addFilter(new JwtLoginFilter(jwtTokenManager, authenticationConfiguration.getAuthenticationManager()))
+			
+			.oauth2Login(t -> {
+				t.userInfoEndpoint((s)->{
+					s.userService(detailSerivceImpl);
+				});
+			})
+			
+			
+			;
+	
+		return security.build();
 	}
 	
-		
-		// 인증과 인가에 관한 설정
-		@Bean
-		SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-		    security
-		        .cors(cors -> cors.disable())
-		        .csrf(csrf -> csrf.disable())
-		        
-		    	// 인가(권한)에 관한 설정
-		        .authorizeHttpRequests(auth -> auth
-		            .requestMatchers("/notice/add", "/notice/update", "/notice/delete").hasRole("ADMIN")
-		            .requestMatchers("/product/add", "/product/update", "/product/delete").hasAnyRole("ADMIN", "MANAGER")
-		            .requestMatchers("/product/**").authenticated()
-		            .requestMatchers("/users/mypage", "/users/update", "/users/logout").authenticated()
-		            .anyRequest().permitAll()
-		        )
-		        
-		        // 로그인 form과 그외 관련 설정
-
-		        .formLogin((form) -> {
-			        // front 분리
-			         form.disable();//폼 비활성화
-		        })
-
-		        .logout(logout -> logout
-		            .logoutUrl("/users/logout")   
-		            // .logoutSuccessUrl("/")
-		            .addLogoutHandler(this.logout)
-		            //.logoutSuccessHandler(logoutSucess)
-		            .invalidateHttpSession(true)
-		            .deleteCookies("JSESSIONID")
-		            .deleteCookies("remember-me")
-		            .deleteCookies("access-token", "refresh-token")
-		        )
-		        
-		        
-		        .rememberMe(remember -> {
-		        	remember
-		        		.rememberMeParameter("rememberme")
-		        		.tokenValiditySeconds(60)
-		        		.key("rememberkey")
-		        		.userDetailsService(userDetailServiceImpl)
-		        		.authenticationSuccessHandler(loginSuccessHandler)
-		        		.useSecureCookie(false)
-		        		;
-		        })
-		        
-		        .sessionManagement(session -> {
-		        	session
-		        		.sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
-		        		
-		        		
-		        })
-		        .httpBasic((h) -> {
-		        	h.disable();
-		        })
-		        
-		        .addFilter(new JwtLoginFilter(jwtTokenManager, authenticationConfiguration.getAuthenticationManager()))
-		        
-		        
-		        .oauth2Login(t -> {
-		        	t.userInfoEndpoint((s) -> {
-		        		s.userService(userDetailServiceImpl);
-		        	});
-		        	
-		        })
-		        
-		        
-		        ;
-
-
-		    return security.build();
-		}
-		
-		
-		@Bean
-		PasswordEncoder getPasswordEncoder() {
-			return new BCryptPasswordEncoder();
-		}
-		
+	
+	@Bean
+	PasswordEncoder getPasswordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
+
+}
+
+
+
+
+
+
+
+
